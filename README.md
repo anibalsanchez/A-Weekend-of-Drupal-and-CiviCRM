@@ -103,4 +103,4 @@ Connection tests:
 
 #### TODO
 
-- A better backups... with [Akeeba](https://www.akeebabackup.com/)
+- A better backup... with [Akeeba](https://www.akeebabackup.com/)
