@@ -1,0 +1,6 @@
+---
+ansible_ssh_user: ubuntu
+site_path: /vagrant/html/drupalcivicrm.extly.com
+
+site_user: ubuntu
+site_group: ubuntu

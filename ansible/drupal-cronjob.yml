@@ -1,0 +1,10 @@
+---
+- hosts: webservers
+  tasks:
+    - name: Run {{ site_domain }}
+      cron:
+        name: Run {{ site_domain }}
+        hour: "*/3"
+        user: "{{ site_user }}"
+        job: "wget 'http://drupalcivicrm.extly.com/cron.php?cron_key=Suw5eyioUTXFM8KolMhhmfecmoODPOpzxhPK6bjAA1o'"
+        state: present

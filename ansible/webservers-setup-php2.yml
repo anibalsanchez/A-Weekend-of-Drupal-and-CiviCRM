@@ -1,0 +1,45 @@
+---
+- hosts: webservers
+  tasks:
+    - name: Install packages
+      apt: name={{ item }} update_cache=yes state=latest
+      with_items:
+        - php7.0
+        - php7.0-cgi
+        - php7.0-cli
+        - php7.0-common
+        - php7.0-curl
+        - php7.0-fpm
+        - php7.0-gd
+        - php7.0-imap
+        - php7.0-intl
+        - php7.0-mbstring
+        - php7.0-mcrypt
+        - php7.0-mysql
+        - php7.0-opcache
+        - php7.0-pspell
+        - php7.0-recode
+        - php7.0-soap
+        - php7.0-sqlite3
+        - php7.0-tidy
+        - php7.0-xmlrpc
+        - php7.0-xsl
+        - php7.0-zip
+        - imagemagick
+        - libruby
+        - mcrypt
+        - memcached
+        - php-auth
+        - php-gettext
+        - php-imagick
+        - php-memcache
+        - php-pear
+        - php-apcu
+        - php-mbstring
+        - php-gettext
+
+    - name: Enable php mcrypt module
+      shell: phpenmod mcrypt
+
+    - name: Enable php mbstring module
+      shell: phpenmod mbstring

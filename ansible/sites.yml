@@ -1,0 +1,16 @@
+---
+- hosts: all
+  roles:
+    - role: kamaln7.swapfile
+    - role: geerlingguy.security
+    - role: geerlingguy.ntp
+  tasks:
+    # Run the equivalent of "apt-get update" as a separate step
+    - apt: update_cache=yes
+    # Update all packages to the latest version
+    - apt: upgrade=dist
+    
+    - apt: name=unzip state=present  
+    - shell: hostnamectl set-hostname {{ site_domain }}
+    - shell: reboot
+      

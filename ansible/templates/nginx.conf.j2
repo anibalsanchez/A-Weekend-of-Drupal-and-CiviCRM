@@ -1,0 +1,145 @@
+
+### Prevent access to this file
+location = /nginx.conf {
+	log_not_found off;
+	access_log off;
+	return 404;
+	break;
+}
+
+######################################################################
+## Protect against common file injection attacks
+######################################################################
+set $file_injection 0;
+if ($query_string ~ "[a-zA-Z0-9_]=http://") {
+	set $file_injection 1;
+}
+if ($query_string ~ "[a-zA-Z0-9_]=(\.\.//?)+") {
+	set $file_injection 1;
+}
+if ($query_string ~ "[a-zA-Z0-9_]=/([a-z0-9_.]//?)+") {
+	set $file_injection 1;
+}
+if ($file_injection = 1) {
+	return 403;
+	break;
+}
+######################################################################
+## Disable PHP Easter Eggs
+######################################################################
+if ($query_string ~ "\=PHP[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}") {
+	return 403;
+	break;
+}
+
+location = /install.php {
+	log_not_found off;
+	access_log off;
+	return 404;
+	break;
+}
+
+location = /update.php {
+	log_not_found off;
+	access_log off;
+	return 404;
+	break;
+}
+
+location = /web.config {
+	log_not_found off;
+	access_log off;
+	return 404;
+	break;
+}
+
+location = /CHANGELOG.txt {
+	log_not_found off;
+	access_log off;
+	return 404;
+	break;
+}
+
+location = /COPYRIGHT.txt {
+	log_not_found off;
+	access_log off;
+	return 404;
+	break;
+}
+
+location = /LICENSE.txt {
+	log_not_found off;
+	access_log off;
+	return 404;
+	break;
+}
+
+location = /INSTALL.mysql.txt {
+	log_not_found off;
+	access_log off;
+	return 404;
+	break;
+}
+
+location = /README.txt {
+	log_not_found off;
+	access_log off;
+	return 404;
+	break;
+}
+
+location = /web.config.txt {
+	log_not_found off;
+	access_log off;
+	return 404;
+	break;
+}
+
+## Protect against clickjacking
+add_header X-Frame-Options SAMEORIGIN;
+
+######################################################################
+## Directory indices and no automatic directory listings
+## Forces index.php to be read before the index.htm(l) files
+## Also disables showing files in a directory automatically
+######################################################################
+index index.php index.html index.htm;
+## HSTS Header - See http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
+add_header Strict-Transport-Security max-age=31536000;
+## Reduce MIME type security risks
+add_header X-Content-Type-Options "nosniff";
+## Reflected XSS prevention
+add_header X-XSS-Protection "1; mode=block";
+## Prevent content transformation
+add_header Cache-Control "no-transform";
+# -- Security options, see http://wiki.nginx.org/HttpCoreModule
+server_name_in_redirect off;
+server_tokens off;
+ignore_invalid_headers on;
+# -- Maximum client body size set to 1 Gigabyte
+client_max_body_size 1G;
+set $common_exploit 0;
+if ($query_string ~ "proc/self/environ") {
+	set $common_exploit 1;
+}
+if ($query_string ~ "mosConfig_[a-zA-Z_]{1,21}(=|\%3D)") {
+	set $common_exploit 1;
+}
+if ($query_string ~ "base64_(en|de)code\(.*\)") {
+	set $common_exploit 1;
+}
+if ($query_string ~ "(<|%3C).*script.*(>|%3E)") {
+	set $common_exploit 1;
+}
+if ($query_string ~ "GLOBALS(=|\[|\%[0-9A-Z]{0,2})") {
+	set $common_exploit 1;
+}
+if ($query_string ~ "_REQUEST(=|\[|\%[0-9A-Z]{0,2})") {
+	set $common_exploit 1;
+}
+if ($common_exploit = 1) {
+	return 403;
+}
+
+
+

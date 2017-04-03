@@ -1,0 +1,18 @@
+---
+- hosts: webservers
+  tasks:
+    - name: Download CivicCRM {{ civicrm_version }}
+      get_url:
+        url: "http://sourceforge.net/projects/civicrm/files/civicrm-stable/{{ civicrm_version }}/civicrm-{{ civicrm_version }}-drupal.tar.gz/download"
+        dest: "/tmp/civicrm.tar.gz"
+        
+    - unarchive:
+        src: "/tmp/civicrm.tar.gz"
+        dest: "{{ site_path }}/web/sites/all/modules"
+        remote_src: True        
+        
+    - name: Just in case ... Owner web folder {{ site_path }}/web      
+      file: path="{{ site_path }}/web" state=directory owner={{ site_user }} group={{ site_group }} recurse=yes
+        
+    - name: Perms on {{ site_path }}/web/sites/default
+      file: path="{{ site_path }}/web/sites/default" state=directory mode=0755

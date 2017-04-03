@@ -1,0 +1,66 @@
+---
+- hosts: webservers
+  tasks:
+    - name: Removing default site
+      file: dest=/etc/php/7.0/fpm/pool.d/www.conf state=absent
+
+    - name: Creating web folder {{ site_path }}/log
+      file: path="{{ site_path }}/log" state=directory owner=root group=root
+
+    - name: Creating web folder {{ site_path }}/private     
+      file: path="{{ site_path }}/private" state=directory owner={{ site_user }} group={{ site_group }} mode=0600
+
+    - name: Creating web folder {{ site_path }}/ssl     
+      file: path="{{ site_path }}/ssl" state=directory owner=root group=root
+
+    - name: Creating web folder {{ site_path }}/tmp
+      file: path="{{ site_path }}/tmp" state=directory owner={{ site_user }} group={{ site_group }} mode=0770
+
+    - name: Creating web folder {{ site_path }}/web      
+      file: path="{{ site_path }}/web" state=directory owner={{ site_user }} group={{ site_group }}      
+
+    - name: Using a Strong DH Group
+      shell: openssl dhparam -out /etc/nginx/dhparams.pem 2048
+
+    - name: Generating {{ site_domain }}.vhost
+      template:
+        src: "{{ site_domain }}.vhost.j2"
+        dest: "/etc/nginx/sites-available/{{ site_domain }}.vhost"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Linking {{ site_domain }}.vhost
+      file: 
+        src: "/etc/nginx/sites-available/{{ site_domain }}.vhost" 
+        dest: "/etc/nginx/sites-enabled/{{ site_domain }}.vhost"
+        state: link   
+
+    - name: Generating /var/lib/php7.0-fpm
+      file: 
+        path: "/var/lib/php7.0-fpm" 
+        state: directory 
+        owner: root 
+        group: root
+
+    - name: Generating {{ site_domain }}.conf        
+      template:
+        src: "{{ site_domain }}.conf.j2"
+        dest: "/etc/php/7.0/fpm/pool.d/{{ site_domain }}.conf"
+        owner: root
+        group: root
+        mode: 0644   
+
+    - name: Generating nginx.conf        
+      template:
+        src: "nginx.conf.j2"
+        dest: "{{ site_path }}/web/nginx.conf"
+        owner: "{{ site_user }}"
+        group: "{{ site_group }}"
+        mode: 0644         
+
+    - name: Restart nginx
+      service: name=nginx state=restarted  
+
+    - name: Restart php-fpm
+      service: name=php7.0-fpm state=restarted             

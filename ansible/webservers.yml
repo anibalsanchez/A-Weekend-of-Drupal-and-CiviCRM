@@ -1,0 +1,9 @@
+---
+
+- include: webservers-setup-nginx.yml
+- include: webservers-setup-php.yml
+- include: webservers-setup-php2.yml
+- include: webservers-setup-ssl.yml
+- include: webservers-setup-user.yml
+- include: webservers-setup-web.yml
+- include: drupal-civicrm.yml

@@ -1,0 +1,6 @@
+---
+- hosts: webservers
+  roles:
+    - role: geerlingguy.nginx
+  tasks:
+    - file: dest={{ site_path }} state=directory  

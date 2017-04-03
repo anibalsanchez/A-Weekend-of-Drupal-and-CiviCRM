@@ -1,0 +1,8 @@
+[sites]
+local-server.extly:2222
+
+[databases]
+local-server.extly:2222
+
+[webservers]
+local-server.extly:2222

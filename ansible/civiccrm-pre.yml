@@ -1,0 +1,21 @@
+---
+- hosts: webservers
+  tasks:
+    - name: Required modules 1
+      command: drush pm-enable --yes admin ctools views views_ui 
+      args:
+        chdir: "{{ site_path }}/web" 
+
+    - name: Required modules 2
+      command: drush pm-download --yes backup_migrate devel 
+      args:
+        chdir: "{{ site_path }}/web" 
+
+    - name: Required modules 3
+      command: drush pm-enable --yes backup_migrate devel
+      args:
+        chdir: "{{ site_path }}/web" 
+
+    - name: Just in case ... Owner web folder {{ site_path }}/web      
+      file: path="{{ site_path }}/web" state=directory owner={{ site_user }} group={{ site_group }} recurse=yes
+        

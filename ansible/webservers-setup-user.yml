@@ -1,0 +1,22 @@
+---
+- hosts: webservers
+  tasks:
+    - name: Adding group sshusers
+      group:
+        name: sshusers
+        state: present
+
+    - name: Adding group {{ site_group }}
+      group:
+        name: "{{ site_group }}"
+        state: present
+
+    - name: Adding user {{ site_user }}
+      user:
+        name: "{{ site_user }}"
+        createhome: yes
+        shell: /bin/bash
+        groups: "{{ site_group }},sshusers"
+        state: present
+      when: site_user != "ubuntu"
+ 

@@ -1,0 +1,5 @@
+---
+- hosts: databases
+  roles:
+    - role: geerlingguy.mysql
+      

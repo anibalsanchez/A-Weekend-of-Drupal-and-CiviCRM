@@ -1,0 +1,26 @@
+---
+mysql_root_username: .....
+mysql_root_password: .....
+mysql_bind_address: 127.0.0.1
+
+mysql_databases:
+
+  - name: .....
+    encoding: latin1
+    collation: latin1_swedish_ci
+
+  - name: .....
+    encoding: latin1
+    collation: latin1_swedish_ci
+
+mysql_users:
+
+  - name: .....
+    host: "%"
+    password: .....
+    priv: "......*:ALL"
+
+  - name: .....
+    host: "%"
+    password: .....
+    priv: "......*:ALL"

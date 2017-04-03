@@ -1,0 +1,9 @@
+---
+- hosts: webservers
+  tasks:
+    - apt_repository: repo='ppa:certbot/certbot' state=present
+    - apt: upgrade=dist
+    - apt: name=certbot state=latest
+    - shell: certbot certonly -n --webroot -w {{ site_path }}/web -d "{{ site_domain }}" -m team@extly.com --agree-tos
+    - shell: cp "/etc/letsencrypt/live/{{ site_folder }}/fullchain.pem" "{{ site_path }}/ssl/fullchain.pem"
+    - shell: cp "/etc/letsencrypt/live/{{ site_folder }}/privkey.pem" "{{ site_path }}/ssl/privkey.pem"

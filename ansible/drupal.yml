@@ -1,0 +1,16 @@
+---
+- hosts: webservers
+  roles:
+    - role: geerlingguy.git
+  tasks:
+    - apt: name=drush state=present
+
+    - name: Download Drupal {{ drupal_version }}
+      get_url:
+        url: "http://ftp.drupal.org/files/projects/{{ drupal_version }}.tar.gz"
+        dest: "/tmp/drupal.tar.gz"
+
+    - unarchive:
+        src: "/tmp/drupal.tar.gz"
+        dest: "{{ site_path }}/web"
+        remote_src: True

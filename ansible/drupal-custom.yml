@@ -1,0 +1,21 @@
+---
+- hosts: webservers
+  roles:
+  tasks:
+    - name: Owner web folder {{ site_path }}/web      
+      file: path="{{ site_path }}/web" state=directory owner={{ site_user }} group={{ site_group }} recurse=yes
+
+    - name: Creating {{ site_path }}/web/sites/default/files 
+      file: path="{{ site_path }}/web/sites/default/files" state=directory owner={{ site_user }} group={{ site_group }}
+
+    - name: Configuring {{ site_path }}/private
+      file: path="{{ site_path }}/private" state=directory owner={{ site_user }} group={{ site_group }} mode=0755
+
+    - name: Creating {{ site_path }}/web/sites/default/settings.php
+      copy:
+        src: "{{ site_path }}/web/sites/default/default.settings.php"
+        dest: "{{ site_path }}/web/sites/default/settings.php"
+        owner: "{{ site_user }}"
+        group: "{{ site_group }}"  
+        remote_src: True
+  
