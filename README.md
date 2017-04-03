@@ -63,16 +63,16 @@ Testing connections:
 
 Definitions:
 
-    - ansible.cfg: remote_user, nocows pls, local roles, no retry files
-    - Organization: general *sites*, divided in *dbservers* and *webservers* (though we've 1 server now).
-    - Environments: Local *stage* and remote *production*
+- ansible.cfg: remote_user, nocows pls, local roles, no retry files
+- Organization: general *sites*, divided in *dbservers* and *webservers* (though we've 1 server now).
+- Environments: Local *stage* and remote *production*
 
 ### Configuration Management
 
 Connection tests: 
 
-    - Stage: ansible sites -i stage -m ping
-    - Production: ansible sites -i production -m ping
+- Stage: ansible sites -i stage -m ping
+- Production: ansible sites -i production -m ping
 
 ### Playbooks
 
